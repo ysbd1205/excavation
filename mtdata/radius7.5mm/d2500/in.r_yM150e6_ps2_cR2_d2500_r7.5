@@ -3,13 +3,13 @@
 
 
 #----set the space to simulate
-variable xsn equal 0.165		#x space negative dir
-variable xsp equal 0.30		#x space positive dir
+variable xsn equal 0.145		#x space negative dir
+variable xsp equal 0.23		#x space positive dir
 variable hwid equal 0.0735	#bucket center offset
 variable ysn equal 0.115-${hwid}	#y space negative dir
 variable ysp equal 0.115+${hwid}	#y
 variable zsn equal 0.18    #z
-variable zsp equal 0.015     #z
+variable zsp equal 0.03    #z
 variable ish equal 0.10     #insertion space height
 
 variable yMod equal 150.e6
@@ -23,7 +23,7 @@ variable dens equal 2500
 variable radi equal 0.0075
 variable dstep equal 10000
 variable fstep equal 800
-variable nparticle equal 3300
+variable nparticle equal 2930
 
 # Moving mesh example
 atom_style	granular
@@ -71,7 +71,7 @@ fix     cad1 all mesh/surface/stress file meshes/bucket.stl type 1 &
         rotate axis 0. 0. 1. angle 180. rotate axis 1. 0. 0. angle -90. rotate axis 0. 1. 0. angle 61.3 &
         scale 0.001 reference_point 0 ${hwid} 0 stress on
 
-fix     cad2 all mesh/surface file meshes/plate.stl type 1 move 100. -260 -80 &
+fix     cad2 all mesh/surface file meshes/plate.stl type 1 move 90. -260 -80 &
         scale 0.001
 
 #region of insertion
