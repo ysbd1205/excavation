@@ -101,7 +101,7 @@ variable Rz equal f_cad1[9]
 dump    dmp all custom/vtk  ${dstep} posts/ir_postyM${yMod}_ps${pois}_cR${cR}_cF${cF}_cRF${cRF}_cV${charV}_ts${tstep}_d${dens}_r${radi}/movingMesh_*.vtk id type type x y z ix iy iz vx vy vz fx fy fz omegax omegay omegaz radius
 dump    dumpstl all mesh/stl ${dstep} posts/ir_postyM${yMod}_ps${pois}_cR${cR}_cF${cF}_cRF${cRF}_cV${charV}_ts${tstep}_d${dens}_r${radi}/dump*.stl
 fix forceslog all print  ${fstep} "${time},${fx},${fy},${fz},${Mx},${My},${Mz},${Rx},${Ry},${Rz}" &
-    file ir_yM${yMod}_ps${pois}_cR${cR}_cF${cF}_cRF${cRF}_cV${charV}_ts${tstep}_d${dens}_r${radi}.csv title "t,Fx,Fy,Fz,Mx,My,Mz,Rx,Ry,Rz" screen no
+    file ../../../csv/ir/ir_yM${yMod}_ps${pois}_cR${cR}_cF${cF}_cRF${cRF}_cV${charV}_ts${tstep}_d${dens}_r${radi}.csv title "t,Fx,Fy,Fz,Mx,My,Mz,Rx,Ry,Rz" screen no
 #print every NUMBER steps
 
 #run with particle insertion
