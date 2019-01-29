@@ -4,15 +4,15 @@ LIGGGHTS (Version LIGGGHTS-PUBLIC 3.8.0, compiled 2018-10-25-19:19:56 by shinji,
 
 
 #----set the space to simulate
-variable xsn equal 0.165		#x space negative dir
-variable xsp equal 0.30		#x space positive dir
+variable xsn equal 0.145		#x space negative dir
+variable xsp equal 0.23		#x space positive dir
 variable hwid equal 0.0735	#bucket center offset
 variable ysn equal 0.115-${hwid}	#y space negative dir
 variable ysn equal 0.115-0.0735	
 variable ysp equal 0.115+${hwid}	#y
 variable ysp equal 0.115+0.0735	
-variable zsn equal 0.245    #z
-variable zsp equal 0.015     #z
+variable zsn equal 0.18    #z
+variable zsp equal 0.03    #z
 variable ish equal 0.10     #insertion space height
 
 variable yMod equal 150.e6
@@ -26,7 +26,7 @@ variable dens equal 4000
 variable radi equal 0.0075
 variable dstep equal 10000
 variable fstep equal 800
-variable nparticle equal 3350
+variable nparticle equal 2900
 
 # Moving mesh example
 atom_style	granular
@@ -37,14 +37,14 @@ communicate	single vel yes
 units		si
 
 region		reg block -${xsn} ${xsp} -${ysn} ${ysp} -${zsn} ${zsp} units box
-region		reg block -0.165 ${xsp} -${ysn} ${ysp} -${zsn} ${zsp} units box
-region		reg block -0.165 0.3 -${ysn} ${ysp} -${zsn} ${zsp} units box
-region		reg block -0.165 0.3 -0.0415 ${ysp} -${zsn} ${zsp} units box
-region		reg block -0.165 0.3 -0.0415 0.1885 -${zsn} ${zsp} units box
-region		reg block -0.165 0.3 -0.0415 0.1885 -0.245 ${zsp} units box
-region		reg block -0.165 0.3 -0.0415 0.1885 -0.245 0.015 units box
+region		reg block -0.145 ${xsp} -${ysn} ${ysp} -${zsn} ${zsp} units box
+region		reg block -0.145 0.23 -${ysn} ${ysp} -${zsn} ${zsp} units box
+region		reg block -0.145 0.23 -0.0415 ${ysp} -${zsn} ${zsp} units box
+region		reg block -0.145 0.23 -0.0415 0.1885 -${zsn} ${zsp} units box
+region		reg block -0.145 0.23 -0.0415 0.1885 -0.18 ${zsp} units box
+region		reg block -0.145 0.23 -0.0415 0.1885 -0.18 0.03 units box
 create_box	1 reg
-Created orthogonal box = (-0.165 -0.0415 -0.245) to (0.3 0.1885 0.015)
+Created orthogonal box = (-0.145 -0.0415 -0.18) to (0.23 0.1885 0.03)
   2 by 1 by 1 MPI processor grid
 
 neighbor	0.015 bin
@@ -77,35 +77,35 @@ fix		2 all gravity 9.80665 vector 0.0 0.0 -1.0
 
 #box walls
 fix boxwalls_x1 all wall/gran model hooke tangential history primitive type 1 xplane -${xsn}
-fix boxwalls_x1 all wall/gran model hooke tangential history primitive type 1 xplane -0.165
+fix boxwalls_x1 all wall/gran model hooke tangential history primitive type 1 xplane -0.145
 fix boxwalls_x2 all wall/gran model hooke tangential history primitive type 1 xplane +${xsp}
-fix boxwalls_x2 all wall/gran model hooke tangential history primitive type 1 xplane +0.3
+fix boxwalls_x2 all wall/gran model hooke tangential history primitive type 1 xplane +0.23
 fix boxwalls_y1 all wall/gran model hooke tangential history primitive type 1 yplane -${ysn}
 fix boxwalls_y1 all wall/gran model hooke tangential history primitive type 1 yplane -0.0415
 fix boxwalls_y2 all wall/gran model hooke tangential history primitive type 1 yplane +${ysp}
 fix boxwalls_y2 all wall/gran model hooke tangential history primitive type 1 yplane +0.1885
 fix boxwalls_z1 all wall/gran model hooke tangential history primitive type 1 zplane -${zsn}
-fix boxwalls_z1 all wall/gran model hooke tangential history primitive type 1 zplane -0.245
+fix boxwalls_z1 all wall/gran model hooke tangential history primitive type 1 zplane -0.18
 fix boxwalls_z2 all wall/gran model hooke tangential history primitive type 1 zplane +${zsp}
-fix boxwalls_z2 all wall/gran model hooke tangential history primitive type 1 zplane +0.015
+fix boxwalls_z2 all wall/gran model hooke tangential history primitive type 1 zplane +0.03
 
 
 #import mesh from cad:
-fix     cad1 all mesh/surface/stress file meshes/bucket.stl type 1         rotate axis 0. 0. 1. angle 180. rotate axis 1. 0. 0. angle -90. rotate axis 0. 1. 0. angle 1.3         scale 0.001 reference_point 0 ${hwid} 0 stress on
-fix     cad1 all mesh/surface/stress file meshes/bucket.stl type 1         rotate axis 0. 0. 1. angle 180. rotate axis 1. 0. 0. angle -90. rotate axis 0. 1. 0. angle 1.3         scale 0.001 reference_point 0 0.0735 0 stress on
+fix     cad1 all mesh/surface/stress file meshes/bucket.stl type 1         rotate axis 0. 0. 1. angle 180. rotate axis 1. 0. 0. angle -90. rotate axis 0. 1. 0. angle 61.3         scale 0.001 reference_point 0 ${hwid} 0 stress on
+fix     cad1 all mesh/surface/stress file meshes/bucket.stl type 1         rotate axis 0. 0. 1. angle 180. rotate axis 1. 0. 0. angle -90. rotate axis 0. 1. 0. angle 61.3         scale 0.001 reference_point 0 0.0735 0 stress on
 WARNING: Mesh for fix mesh/surface/stress has been scaled, moved, or rotated.
 Please note that values for 'reference_point' refer to the scaled, moved, or rotated configuration (../mesh_module_stress.cpp:104)
 
-fix     cad2 all mesh/surface file meshes/plate.stl type 1 move 95. -255 -140         scale 0.001
+fix     cad2 all mesh/surface file meshes/plate.stl type 1 move 90. -260 -80         scale 0.001
 
 #region of insertion
 region		bc block -${xsn} ${xsp} -${ysn} ${ysp} -${zsn} ${zsp} units box
-region		bc block -0.165 ${xsp} -${ysn} ${ysp} -${zsn} ${zsp} units box
-region		bc block -0.165 0.3 -${ysn} ${ysp} -${zsn} ${zsp} units box
-region		bc block -0.165 0.3 -0.0415 ${ysp} -${zsn} ${zsp} units box
-region		bc block -0.165 0.3 -0.0415 0.1885 -${zsn} ${zsp} units box
-region		bc block -0.165 0.3 -0.0415 0.1885 -0.245 ${zsp} units box
-region		bc block -0.165 0.3 -0.0415 0.1885 -0.245 0.015 units box
+region		bc block -0.145 ${xsp} -${ysn} ${ysp} -${zsn} ${zsp} units box
+region		bc block -0.145 0.23 -${ysn} ${ysp} -${zsn} ${zsp} units box
+region		bc block -0.145 0.23 -0.0415 ${ysp} -${zsn} ${zsp} units box
+region		bc block -0.145 0.23 -0.0415 0.1885 -${zsn} ${zsp} units box
+region		bc block -0.145 0.23 -0.0415 0.1885 -0.18 ${zsp} units box
+region		bc block -0.145 0.23 -0.0415 0.1885 -0.18 0.03 units box
 
 #particle distributions
 fix			pts1 all particletemplate/sphere 15485863 atom_type 1 density constant ${dens} radius constant ${radi}
@@ -115,7 +115,7 @@ fix			pdd1 all particledistribution/discrete 15485867 1 pts1 1.0
 
 fix         ts_check all check/timestep/gran 1000 0.1 0.1
 fix         ins all insert/pack seed 32452843 distributiontemplate pdd1 vel constant 0. 0. -0.8             insert_every 2000 overlapcheck yes all_in yes particles_in_region ${nparticle} region bc
-fix         ins all insert/pack seed 32452843 distributiontemplate pdd1 vel constant 0. 0. -0.8             insert_every 2000 overlapcheck yes all_in yes particles_in_region 3350 region bc
+fix         ins all insert/pack seed 32452843 distributiontemplate pdd1 vel constant 0. 0. -0.8             insert_every 2000 overlapcheck yes all_in yes particles_in_region 2900 region bc
 
 #get total force and torque of mesh "cad1"
 variable time equal step*dt
@@ -130,347 +130,505 @@ variable Ry equal f_cad1[8]
 variable Rz equal f_cad1[9]
 
 #make a dump of particles and the stl file
-dump    dmp all custom/vtk  ${dstep} posts/i_postyM${yMod}_ps${pois}_cR${cR}_cF${cF}_cRF${cRF}_cV${charV}_ts${tstep}_d${dens}_r${radi}/movingMesh_*.vtk id type type x y z ix iy iz vx vy vz fx fy fz omegax omegay omegaz radius
-dump    dmp all custom/vtk  10000 posts/i_postyM${yMod}_ps${pois}_cR${cR}_cF${cF}_cRF${cRF}_cV${charV}_ts${tstep}_d${dens}_r${radi}/movingMesh_*.vtk id type type x y z ix iy iz vx vy vz fx fy fz omegax omegay omegaz radius
-dump    dmp all custom/vtk  10000 posts/i_postyM150000000_ps${pois}_cR${cR}_cF${cF}_cRF${cRF}_cV${charV}_ts${tstep}_d${dens}_r${radi}/movingMesh_*.vtk id type type x y z ix iy iz vx vy vz fx fy fz omegax omegay omegaz radius
-dump    dmp all custom/vtk  10000 posts/i_postyM150000000_ps0.2_cR${cR}_cF${cF}_cRF${cRF}_cV${charV}_ts${tstep}_d${dens}_r${radi}/movingMesh_*.vtk id type type x y z ix iy iz vx vy vz fx fy fz omegax omegay omegaz radius
-dump    dmp all custom/vtk  10000 posts/i_postyM150000000_ps0.2_cR0.2_cF${cF}_cRF${cRF}_cV${charV}_ts${tstep}_d${dens}_r${radi}/movingMesh_*.vtk id type type x y z ix iy iz vx vy vz fx fy fz omegax omegay omegaz radius
-dump    dmp all custom/vtk  10000 posts/i_postyM150000000_ps0.2_cR0.2_cF0.5_cRF${cRF}_cV${charV}_ts${tstep}_d${dens}_r${radi}/movingMesh_*.vtk id type type x y z ix iy iz vx vy vz fx fy fz omegax omegay omegaz radius
-dump    dmp all custom/vtk  10000 posts/i_postyM150000000_ps0.2_cR0.2_cF0.5_cRF0.9_cV${charV}_ts${tstep}_d${dens}_r${radi}/movingMesh_*.vtk id type type x y z ix iy iz vx vy vz fx fy fz omegax omegay omegaz radius
-dump    dmp all custom/vtk  10000 posts/i_postyM150000000_ps0.2_cR0.2_cF0.5_cRF0.9_cV2_ts${tstep}_d${dens}_r${radi}/movingMesh_*.vtk id type type x y z ix iy iz vx vy vz fx fy fz omegax omegay omegaz radius
-dump    dmp all custom/vtk  10000 posts/i_postyM150000000_ps0.2_cR0.2_cF0.5_cRF0.9_cV2_ts1e-05_d${dens}_r${radi}/movingMesh_*.vtk id type type x y z ix iy iz vx vy vz fx fy fz omegax omegay omegaz radius
-dump    dmp all custom/vtk  10000 posts/i_postyM150000000_ps0.2_cR0.2_cF0.5_cRF0.9_cV2_ts1e-05_d4000_r${radi}/movingMesh_*.vtk id type type x y z ix iy iz vx vy vz fx fy fz omegax omegay omegaz radius
-dump    dmp all custom/vtk  10000 posts/i_postyM150000000_ps0.2_cR0.2_cF0.5_cRF0.9_cV2_ts1e-05_d4000_r0.0075/movingMesh_*.vtk id type type x y z ix iy iz vx vy vz fx fy fz omegax omegay omegaz radius
-dump    dumpstl all mesh/stl ${dstep} posts/i_postyM${yMod}_ps${pois}_cR${cR}_cF${cF}_cRF${cRF}_cV${charV}_ts${tstep}_d${dens}_r${radi}/dump*.stl
-dump    dumpstl all mesh/stl 10000 posts/i_postyM${yMod}_ps${pois}_cR${cR}_cF${cF}_cRF${cRF}_cV${charV}_ts${tstep}_d${dens}_r${radi}/dump*.stl
-dump    dumpstl all mesh/stl 10000 posts/i_postyM150000000_ps${pois}_cR${cR}_cF${cF}_cRF${cRF}_cV${charV}_ts${tstep}_d${dens}_r${radi}/dump*.stl
-dump    dumpstl all mesh/stl 10000 posts/i_postyM150000000_ps0.2_cR${cR}_cF${cF}_cRF${cRF}_cV${charV}_ts${tstep}_d${dens}_r${radi}/dump*.stl
-dump    dumpstl all mesh/stl 10000 posts/i_postyM150000000_ps0.2_cR0.2_cF${cF}_cRF${cRF}_cV${charV}_ts${tstep}_d${dens}_r${radi}/dump*.stl
-dump    dumpstl all mesh/stl 10000 posts/i_postyM150000000_ps0.2_cR0.2_cF0.5_cRF${cRF}_cV${charV}_ts${tstep}_d${dens}_r${radi}/dump*.stl
-dump    dumpstl all mesh/stl 10000 posts/i_postyM150000000_ps0.2_cR0.2_cF0.5_cRF0.9_cV${charV}_ts${tstep}_d${dens}_r${radi}/dump*.stl
-dump    dumpstl all mesh/stl 10000 posts/i_postyM150000000_ps0.2_cR0.2_cF0.5_cRF0.9_cV2_ts${tstep}_d${dens}_r${radi}/dump*.stl
-dump    dumpstl all mesh/stl 10000 posts/i_postyM150000000_ps0.2_cR0.2_cF0.5_cRF0.9_cV2_ts1e-05_d${dens}_r${radi}/dump*.stl
-dump    dumpstl all mesh/stl 10000 posts/i_postyM150000000_ps0.2_cR0.2_cF0.5_cRF0.9_cV2_ts1e-05_d4000_r${radi}/dump*.stl
-dump    dumpstl all mesh/stl 10000 posts/i_postyM150000000_ps0.2_cR0.2_cF0.5_cRF0.9_cV2_ts1e-05_d4000_r0.0075/dump*.stl
-fix forceslog all print  ${fstep} "${time},${fx},${fy},${fz},${Mx},${My},${Mz},${Rx},${Ry},${Rz}"     file ../../../csv/i/i_yM${yMod}_ps${pois}_cR${cR}_cF${cF}_cRF${cRF}_cV${charV}_ts${tstep}_d${dens}_r${radi}.csv title "t,Fx,Fy,Fz,Mx,My,Mz,Rx,Ry,Rz" screen no
-fix forceslog all print  800 "${time},${fx},${fy},${fz},${Mx},${My},${Mz},${Rx},${Ry},${Rz}"     file ../../../csv/i/i_yM${yMod}_ps${pois}_cR${cR}_cF${cF}_cRF${cRF}_cV${charV}_ts${tstep}_d${dens}_r${radi}.csv title "t,Fx,Fy,Fz,Mx,My,Mz,Rx,Ry,Rz" screen no
-fix forceslog all print  800 "${time},${fx},${fy},${fz},${Mx},${My},${Mz},${Rx},${Ry},${Rz}"     file ../../../csv/i/i_yM150000000_ps${pois}_cR${cR}_cF${cF}_cRF${cRF}_cV${charV}_ts${tstep}_d${dens}_r${radi}.csv title "t,Fx,Fy,Fz,Mx,My,Mz,Rx,Ry,Rz" screen no
-fix forceslog all print  800 "${time},${fx},${fy},${fz},${Mx},${My},${Mz},${Rx},${Ry},${Rz}"     file ../../../csv/i/i_yM150000000_ps0.2_cR${cR}_cF${cF}_cRF${cRF}_cV${charV}_ts${tstep}_d${dens}_r${radi}.csv title "t,Fx,Fy,Fz,Mx,My,Mz,Rx,Ry,Rz" screen no
-fix forceslog all print  800 "${time},${fx},${fy},${fz},${Mx},${My},${Mz},${Rx},${Ry},${Rz}"     file ../../../csv/i/i_yM150000000_ps0.2_cR0.2_cF${cF}_cRF${cRF}_cV${charV}_ts${tstep}_d${dens}_r${radi}.csv title "t,Fx,Fy,Fz,Mx,My,Mz,Rx,Ry,Rz" screen no
-fix forceslog all print  800 "${time},${fx},${fy},${fz},${Mx},${My},${Mz},${Rx},${Ry},${Rz}"     file ../../../csv/i/i_yM150000000_ps0.2_cR0.2_cF0.5_cRF${cRF}_cV${charV}_ts${tstep}_d${dens}_r${radi}.csv title "t,Fx,Fy,Fz,Mx,My,Mz,Rx,Ry,Rz" screen no
-fix forceslog all print  800 "${time},${fx},${fy},${fz},${Mx},${My},${Mz},${Rx},${Ry},${Rz}"     file ../../../csv/i/i_yM150000000_ps0.2_cR0.2_cF0.5_cRF0.9_cV${charV}_ts${tstep}_d${dens}_r${radi}.csv title "t,Fx,Fy,Fz,Mx,My,Mz,Rx,Ry,Rz" screen no
-fix forceslog all print  800 "${time},${fx},${fy},${fz},${Mx},${My},${Mz},${Rx},${Ry},${Rz}"     file ../../../csv/i/i_yM150000000_ps0.2_cR0.2_cF0.5_cRF0.9_cV2_ts${tstep}_d${dens}_r${radi}.csv title "t,Fx,Fy,Fz,Mx,My,Mz,Rx,Ry,Rz" screen no
-fix forceslog all print  800 "${time},${fx},${fy},${fz},${Mx},${My},${Mz},${Rx},${Ry},${Rz}"     file ../../../csv/i/i_yM150000000_ps0.2_cR0.2_cF0.5_cRF0.9_cV2_ts1e-05_d${dens}_r${radi}.csv title "t,Fx,Fy,Fz,Mx,My,Mz,Rx,Ry,Rz" screen no
-fix forceslog all print  800 "${time},${fx},${fy},${fz},${Mx},${My},${Mz},${Rx},${Ry},${Rz}"     file ../../../csv/i/i_yM150000000_ps0.2_cR0.2_cF0.5_cRF0.9_cV2_ts1e-05_d4000_r${radi}.csv title "t,Fx,Fy,Fz,Mx,My,Mz,Rx,Ry,Rz" screen no
-fix forceslog all print  800 "${time},${fx},${fy},${fz},${Mx},${My},${Mz},${Rx},${Ry},${Rz}"     file ../../../csv/i/i_yM150000000_ps0.2_cR0.2_cF0.5_cRF0.9_cV2_ts1e-05_d4000_r0.0075.csv title "t,Fx,Fy,Fz,Mx,My,Mz,Rx,Ry,Rz" screen no
+dump    dmp all custom/vtk  ${dstep} posts/r_postyM${yMod}_ps${pois}_cR${cR}_cF${cF}_cRF${cRF}_cV${charV}_ts${tstep}_d${dens}_r${radi}/movingMesh_*.vtk id type type x y z ix iy iz vx vy vz fx fy fz omegax omegay omegaz radius
+dump    dmp all custom/vtk  10000 posts/r_postyM${yMod}_ps${pois}_cR${cR}_cF${cF}_cRF${cRF}_cV${charV}_ts${tstep}_d${dens}_r${radi}/movingMesh_*.vtk id type type x y z ix iy iz vx vy vz fx fy fz omegax omegay omegaz radius
+dump    dmp all custom/vtk  10000 posts/r_postyM150000000_ps${pois}_cR${cR}_cF${cF}_cRF${cRF}_cV${charV}_ts${tstep}_d${dens}_r${radi}/movingMesh_*.vtk id type type x y z ix iy iz vx vy vz fx fy fz omegax omegay omegaz radius
+dump    dmp all custom/vtk  10000 posts/r_postyM150000000_ps0.2_cR${cR}_cF${cF}_cRF${cRF}_cV${charV}_ts${tstep}_d${dens}_r${radi}/movingMesh_*.vtk id type type x y z ix iy iz vx vy vz fx fy fz omegax omegay omegaz radius
+dump    dmp all custom/vtk  10000 posts/r_postyM150000000_ps0.2_cR0.2_cF${cF}_cRF${cRF}_cV${charV}_ts${tstep}_d${dens}_r${radi}/movingMesh_*.vtk id type type x y z ix iy iz vx vy vz fx fy fz omegax omegay omegaz radius
+dump    dmp all custom/vtk  10000 posts/r_postyM150000000_ps0.2_cR0.2_cF0.5_cRF${cRF}_cV${charV}_ts${tstep}_d${dens}_r${radi}/movingMesh_*.vtk id type type x y z ix iy iz vx vy vz fx fy fz omegax omegay omegaz radius
+dump    dmp all custom/vtk  10000 posts/r_postyM150000000_ps0.2_cR0.2_cF0.5_cRF0.9_cV${charV}_ts${tstep}_d${dens}_r${radi}/movingMesh_*.vtk id type type x y z ix iy iz vx vy vz fx fy fz omegax omegay omegaz radius
+dump    dmp all custom/vtk  10000 posts/r_postyM150000000_ps0.2_cR0.2_cF0.5_cRF0.9_cV2_ts${tstep}_d${dens}_r${radi}/movingMesh_*.vtk id type type x y z ix iy iz vx vy vz fx fy fz omegax omegay omegaz radius
+dump    dmp all custom/vtk  10000 posts/r_postyM150000000_ps0.2_cR0.2_cF0.5_cRF0.9_cV2_ts1e-05_d${dens}_r${radi}/movingMesh_*.vtk id type type x y z ix iy iz vx vy vz fx fy fz omegax omegay omegaz radius
+dump    dmp all custom/vtk  10000 posts/r_postyM150000000_ps0.2_cR0.2_cF0.5_cRF0.9_cV2_ts1e-05_d4000_r${radi}/movingMesh_*.vtk id type type x y z ix iy iz vx vy vz fx fy fz omegax omegay omegaz radius
+dump    dmp all custom/vtk  10000 posts/r_postyM150000000_ps0.2_cR0.2_cF0.5_cRF0.9_cV2_ts1e-05_d4000_r0.0075/movingMesh_*.vtk id type type x y z ix iy iz vx vy vz fx fy fz omegax omegay omegaz radius
+dump    dumpstl all mesh/stl ${dstep} posts/r_postyM${yMod}_ps${pois}_cR${cR}_cF${cF}_cRF${cRF}_cV${charV}_ts${tstep}_d${dens}_r${radi}/dump*.stl
+dump    dumpstl all mesh/stl 10000 posts/r_postyM${yMod}_ps${pois}_cR${cR}_cF${cF}_cRF${cRF}_cV${charV}_ts${tstep}_d${dens}_r${radi}/dump*.stl
+dump    dumpstl all mesh/stl 10000 posts/r_postyM150000000_ps${pois}_cR${cR}_cF${cF}_cRF${cRF}_cV${charV}_ts${tstep}_d${dens}_r${radi}/dump*.stl
+dump    dumpstl all mesh/stl 10000 posts/r_postyM150000000_ps0.2_cR${cR}_cF${cF}_cRF${cRF}_cV${charV}_ts${tstep}_d${dens}_r${radi}/dump*.stl
+dump    dumpstl all mesh/stl 10000 posts/r_postyM150000000_ps0.2_cR0.2_cF${cF}_cRF${cRF}_cV${charV}_ts${tstep}_d${dens}_r${radi}/dump*.stl
+dump    dumpstl all mesh/stl 10000 posts/r_postyM150000000_ps0.2_cR0.2_cF0.5_cRF${cRF}_cV${charV}_ts${tstep}_d${dens}_r${radi}/dump*.stl
+dump    dumpstl all mesh/stl 10000 posts/r_postyM150000000_ps0.2_cR0.2_cF0.5_cRF0.9_cV${charV}_ts${tstep}_d${dens}_r${radi}/dump*.stl
+dump    dumpstl all mesh/stl 10000 posts/r_postyM150000000_ps0.2_cR0.2_cF0.5_cRF0.9_cV2_ts${tstep}_d${dens}_r${radi}/dump*.stl
+dump    dumpstl all mesh/stl 10000 posts/r_postyM150000000_ps0.2_cR0.2_cF0.5_cRF0.9_cV2_ts1e-05_d${dens}_r${radi}/dump*.stl
+dump    dumpstl all mesh/stl 10000 posts/r_postyM150000000_ps0.2_cR0.2_cF0.5_cRF0.9_cV2_ts1e-05_d4000_r${radi}/dump*.stl
+dump    dumpstl all mesh/stl 10000 posts/r_postyM150000000_ps0.2_cR0.2_cF0.5_cRF0.9_cV2_ts1e-05_d4000_r0.0075/dump*.stl
+fix forceslog all print  ${fstep} "${time},${fx},${fy},${fz},${Mx},${My},${Mz},${Rx},${Ry},${Rz}"     file ../../../csv/r/r_yM${yMod}_ps${pois}_cR${cR}_cF${cF}_cRF${cRF}_cV${charV}_ts${tstep}_d${dens}_r${radi}.csv title "t,Fx,Fy,Fz,Mx,My,Mz,Rx,Ry,Rz" screen no
+fix forceslog all print  800 "${time},${fx},${fy},${fz},${Mx},${My},${Mz},${Rx},${Ry},${Rz}"     file ../../../csv/r/r_yM${yMod}_ps${pois}_cR${cR}_cF${cF}_cRF${cRF}_cV${charV}_ts${tstep}_d${dens}_r${radi}.csv title "t,Fx,Fy,Fz,Mx,My,Mz,Rx,Ry,Rz" screen no
+fix forceslog all print  800 "${time},${fx},${fy},${fz},${Mx},${My},${Mz},${Rx},${Ry},${Rz}"     file ../../../csv/r/r_yM150000000_ps${pois}_cR${cR}_cF${cF}_cRF${cRF}_cV${charV}_ts${tstep}_d${dens}_r${radi}.csv title "t,Fx,Fy,Fz,Mx,My,Mz,Rx,Ry,Rz" screen no
+fix forceslog all print  800 "${time},${fx},${fy},${fz},${Mx},${My},${Mz},${Rx},${Ry},${Rz}"     file ../../../csv/r/r_yM150000000_ps0.2_cR${cR}_cF${cF}_cRF${cRF}_cV${charV}_ts${tstep}_d${dens}_r${radi}.csv title "t,Fx,Fy,Fz,Mx,My,Mz,Rx,Ry,Rz" screen no
+fix forceslog all print  800 "${time},${fx},${fy},${fz},${Mx},${My},${Mz},${Rx},${Ry},${Rz}"     file ../../../csv/r/r_yM150000000_ps0.2_cR0.2_cF${cF}_cRF${cRF}_cV${charV}_ts${tstep}_d${dens}_r${radi}.csv title "t,Fx,Fy,Fz,Mx,My,Mz,Rx,Ry,Rz" screen no
+fix forceslog all print  800 "${time},${fx},${fy},${fz},${Mx},${My},${Mz},${Rx},${Ry},${Rz}"     file ../../../csv/r/r_yM150000000_ps0.2_cR0.2_cF0.5_cRF${cRF}_cV${charV}_ts${tstep}_d${dens}_r${radi}.csv title "t,Fx,Fy,Fz,Mx,My,Mz,Rx,Ry,Rz" screen no
+fix forceslog all print  800 "${time},${fx},${fy},${fz},${Mx},${My},${Mz},${Rx},${Ry},${Rz}"     file ../../../csv/r/r_yM150000000_ps0.2_cR0.2_cF0.5_cRF0.9_cV${charV}_ts${tstep}_d${dens}_r${radi}.csv title "t,Fx,Fy,Fz,Mx,My,Mz,Rx,Ry,Rz" screen no
+fix forceslog all print  800 "${time},${fx},${fy},${fz},${Mx},${My},${Mz},${Rx},${Ry},${Rz}"     file ../../../csv/r/r_yM150000000_ps0.2_cR0.2_cF0.5_cRF0.9_cV2_ts${tstep}_d${dens}_r${radi}.csv title "t,Fx,Fy,Fz,Mx,My,Mz,Rx,Ry,Rz" screen no
+fix forceslog all print  800 "${time},${fx},${fy},${fz},${Mx},${My},${Mz},${Rx},${Ry},${Rz}"     file ../../../csv/r/r_yM150000000_ps0.2_cR0.2_cF0.5_cRF0.9_cV2_ts1e-05_d${dens}_r${radi}.csv title "t,Fx,Fy,Fz,Mx,My,Mz,Rx,Ry,Rz" screen no
+fix forceslog all print  800 "${time},${fx},${fy},${fz},${Mx},${My},${Mz},${Rx},${Ry},${Rz}"     file ../../../csv/r/r_yM150000000_ps0.2_cR0.2_cF0.5_cRF0.9_cV2_ts1e-05_d4000_r${radi}.csv title "t,Fx,Fy,Fz,Mx,My,Mz,Rx,Ry,Rz" screen no
+fix forceslog all print  800 "${time},${fx},${fy},${fz},${Mx},${My},${Mz},${Rx},${Ry},${Rz}"     file ../../../csv/r/r_yM150000000_ps0.2_cR0.2_cF0.5_cRF0.9_cV2_ts1e-05_d4000_r0.0075.csv title "t,Fx,Fy,Fz,Mx,My,Mz,Rx,Ry,Rz" screen no
 #print every NUMBER steps
 
 #run with particle insertion
 run     20000 upto
-Setting up run at Mon Jan 28 19:16:56 2019
+Setting up run at Tue Jan 29 21:18:44 2019
 
 INFO: Particle insertion ins: inserting every 2000 steps
-Memory usage per processor = 17.3194 Mbytes
+Memory usage per processor = 17.3697 Mbytes
     Step    Atoms         KinEng            CPU         Volume 
-       0        0              0              0    0.078694035 
-INFO: Particle insertion ins: inserted 3350 particle templates (mass 2.367975e+01) at step 1
- - a total of 3350 particle templates (mass 2.367975e+01) inserted so far.
-   20000     3350   0.0038188409      17.158388    0.078694035 
-Loop time of 17.1584 on 2 procs for 20000 steps with 3350 atoms, finish time Mon Jan 28 19:17:15 2019
+       0        0              0              0    0.071741598 
+INFO: Particle insertion ins: inserted 2872 particle templates (mass 2.030097e+01) at step 1
+ - a total of 2872 particle templates (mass 2.030097e+01) inserted so far.
+WARNING: Particle insertion: Less insertions than requested (../fix_insert.cpp:814)
+INFO: Particle insertion ins: inserted 28 particle templates (mass 1.979203e-01) at step 2001
+ - a total of 2900 particle templates (mass 2.049889e+01) inserted so far.
+   20000     2900   0.0017539733      17.767735    0.071741598 
+Loop time of 17.7677 on 2 procs for 20000 steps with 2900 atoms, finish time Tue Jan 29 21:19:03 2019
 
 
-Pair  time (%) = 9.34042 (54.4364)
-Neigh time (%) = 0.0556793 (0.324502)
-Comm  time (%) = 0.199001 (1.15979)
-Outpt time (%) = 0.306591 (1.78683)
-Other time (%) = 7.2567 (42.2924)
+Pair  time (%) = 9.02245 (50.78)
+Neigh time (%) = 0.0316619 (0.178199)
+Comm  time (%) = 0.205156 (1.15465)
+Outpt time (%) = 0.273883 (1.54146)
+Other time (%) = 8.23459 (46.3457)
 
-Nlocal:    1675 ave 1839 max 1511 min
+Nlocal:    1450 ave 1836 max 1064 min
 Histogram: 1 0 0 0 0 0 0 0 0 1
-Nghost:    210 ave 215 max 205 min
+Nghost:    224.5 ave 227 max 222 min
 Histogram: 1 0 0 0 0 0 0 0 0 1
-Neighs:    24075.5 ave 26379 max 21772 min
+Neighs:    20865 ave 26475 max 15255 min
 Histogram: 1 0 0 0 0 0 0 0 0 1
 
-Total # of neighbors = 48151
-Ave neighs/atom = 14.3734
-Neighbor list builds = 33
+Total # of neighbors = 41730
+Ave neighs/atom = 14.3897
+Neighbor list builds = 23
 Dangerous builds = 0
 unfix   ins
 
 
 #run to let particle settle
 run     49999 upto
-Setting up run at Mon Jan 28 19:17:15 2019
+Setting up run at Tue Jan 29 21:19:03 2019
 
-Memory usage per processor = 22.1245 Mbytes
+Memory usage per processor = 22.1809 Mbytes
     Step    Atoms         KinEng            CPU         Volume 
-   20000     3350   0.0038188409              0    0.078694035 
-   49999     3350  3.1576791e-05      33.953955    0.078694035 
-Loop time of 33.954 on 2 procs for 29999 steps with 3350 atoms, finish time Mon Jan 28 19:17:49 2019
+   20000     2900   0.0017539733              0    0.071741598 
+   49999     2900   1.554658e-05      35.361286    0.071741598 
+Loop time of 35.3613 on 2 procs for 29999 steps with 2900 atoms, finish time Tue Jan 29 21:19:39 2019
 
 
-Pair  time (%) = 22.3184 (65.7314)
-Neigh time (%) = 0.0105387 (0.0310382)
-Comm  time (%) = 0.294044 (0.866008)
-Outpt time (%) = 0.277722 (0.817935)
-Other time (%) = 11.0532 (32.5536)
+Pair  time (%) = 19.6527 (55.577)
+Neigh time (%) = 0.0070765 (0.020012)
+Comm  time (%) = 0.314953 (0.890671)
+Outpt time (%) = 0.313024 (0.885217)
+Other time (%) = 15.0735 (42.6271)
 
-Nlocal:    1675 ave 1840 max 1510 min
+Nlocal:    1450 ave 1836 max 1064 min
 Histogram: 1 0 0 0 0 0 0 0 0 1
-Nghost:    210.5 ave 214 max 207 min
+Nghost:    225.5 ave 228 max 223 min
 Histogram: 1 0 0 0 0 0 0 0 0 1
-Neighs:    24216 ave 26572 max 21860 min
+Neighs:    20973 ave 26613 max 15333 min
 Histogram: 1 0 0 0 0 0 0 0 0 1
 
-Total # of neighbors = 48432
-Ave neighs/atom = 14.4573
-Neighbor list builds = 6
+Total # of neighbors = 41946
+Ave neighs/atom = 14.4641
+Neighbor list builds = 5
 Dangerous builds = 0
 
 #make the particles flat
 fix     plate all wall/gran model hooke tangential history mesh n_meshes 1 meshes cad2
 run     1
-Setting up run at Mon Jan 28 19:17:49 2019
+Setting up run at Tue Jan 29 21:19:39 2019
 
-Memory usage per processor = 29.8304 Mbytes
+Memory usage per processor = 29.8866 Mbytes
     Step    Atoms         KinEng            CPU         Volume 
-   49999     3350  3.1576791e-05              0    0.078694035 
-   50000     3350  3.2421369e-05     0.17722607    0.078694035 
-Loop time of 0.177237 on 2 procs for 1 steps with 3350 atoms, finish time Mon Jan 28 19:17:49 2019
+   49999     2900   1.554658e-05              0    0.071741598 
+   50000     2900  1.7034237e-05       0.193187    0.071741598 
+Loop time of 0.193197 on 2 procs for 1 steps with 2900 atoms, finish time Tue Jan 29 21:19:39 2019
 
 
-Pair  time (%) = 0.00077951 (0.439812)
+Pair  time (%) = 0.000803471 (0.415881)
 Neigh time (%) = 0 (0)
-Comm  time (%) = 1.74046e-05 (0.00981993)
-Outpt time (%) = 0.17551 (99.0258)
-Other time (%) = 0.000929713 (0.524559)
+Comm  time (%) = 1.83582e-05 (0.00950234)
+Outpt time (%) = 0.191151 (98.9412)
+Other time (%) = 0.0012238 (0.633448)
 
-Nlocal:    1675 ave 1840 max 1510 min
+Nlocal:    1450 ave 1836 max 1064 min
 Histogram: 1 0 0 0 0 0 0 0 0 1
-Nghost:    210.5 ave 214 max 207 min
+Nghost:    225.5 ave 228 max 223 min
 Histogram: 1 0 0 0 0 0 0 0 0 1
-Neighs:    24215.5 ave 26572 max 21859 min
+Neighs:    20974 ave 26621 max 15327 min
 Histogram: 1 0 0 0 0 0 0 0 0 1
 
-Total # of neighbors = 48431
-Ave neighs/atom = 14.457
+Total # of neighbors = 41948
+Ave neighs/atom = 14.4648
 Neighbor list builds = 0
 Dangerous builds = 0
 fix     moveplate1 all move/mesh mesh cad2 linear 0. 0.5 0.
 run     112500 upto
-Setting up run at Mon Jan 28 19:17:49 2019
+Setting up run at Tue Jan 29 21:19:39 2019
 
-Memory usage per processor = 29.8304 Mbytes
+Memory usage per processor = 29.8866 Mbytes
     Step    Atoms         KinEng            CPU         Volume 
-   50000     3350  3.2421369e-05              0    0.078694035 
-  112500     3350     0.94901597      728.08509    0.097410632 
-Loop time of 728.085 on 2 procs for 62500 steps with 3350 atoms, finish time Mon Jan 28 19:29:58 2019
+   50000     2900  1.7034237e-05              0    0.071741598 
+  112500     2900      1.5351891      730.07811    0.083540577 
+Loop time of 730.078 on 2 procs for 62500 steps with 2900 atoms, finish time Tue Jan 29 21:31:49 2019
 
 
-Pair  time (%) = 44.3204 (6.08725)
-Neigh time (%) = 0.236667 (0.0325054)
-Comm  time (%) = 2.17684 (0.298981)
-Outpt time (%) = 0.798648 (0.109692)
-Other time (%) = 680.553 (93.4716)
+Pair  time (%) = 36.3467 (4.97847)
+Neigh time (%) = 0.173934 (0.023824)
+Comm  time (%) = 2.28789 (0.313376)
+Outpt time (%) = 0.76836 (0.105244)
+Other time (%) = 690.501 (94.5791)
 
-Nlocal:    1675 ave 1832 max 1518 min
+Nlocal:    1450 ave 1837 max 1063 min
 Histogram: 1 0 0 0 0 0 0 0 0 1
-Nghost:    212 ave 224 max 200 min
+Nghost:    232 ave 243 max 221 min
 Histogram: 1 0 0 0 0 0 0 0 0 1
-Neighs:    23616.5 ave 25852 max 21381 min
+Neighs:    20130.5 ave 25417 max 14844 min
 Histogram: 1 0 0 0 0 0 0 0 0 1
 
-Total # of neighbors = 47233
-Ave neighs/atom = 14.0994
-Neighbor list builds = 142
+Total # of neighbors = 40261
+Ave neighs/atom = 13.8831
+Neighbor list builds = 128
 Dangerous builds = 0
 unfix   moveplate1
 
 fix     moveplate2 all move/mesh mesh cad2 linear 0. 0. 0.5
 run     149999 upto
-Setting up run at Mon Jan 28 19:29:58 2019
+Setting up run at Tue Jan 29 21:31:49 2019
 
-Memory usage per processor = 46.4445 Mbytes
+Memory usage per processor = 46.4935 Mbytes
     Step    Atoms         KinEng            CPU         Volume 
-  112500     3350     0.94901597              0    0.097836526 
-  149999     3350      59.619884      487.73633      3.0497453 
-Loop time of 487.736 on 2 procs for 37499 steps with 3350 atoms, finish time Mon Jan 28 19:38:05 2019
+  112500     2900      1.5351891              0    0.084280937 
+  149999     2900      75.892935      463.30827      6.3414271 
+Loop time of 463.308 on 2 procs for 37499 steps with 2900 atoms, finish time Tue Jan 29 21:39:33 2019
 
 
-Pair  time (%) = 27.5914 (5.65704)
-Neigh time (%) = 0.888778 (0.182225)
-Comm  time (%) = 1.62053 (0.332255)
-Outpt time (%) = 0.414811 (0.0850483)
-Other time (%) = 457.221 (93.7434)
+Pair  time (%) = 21.2603 (4.5888)
+Neigh time (%) = 1.0187 (0.219874)
+Comm  time (%) = 2.77695 (0.599375)
+Outpt time (%) = 0.368381 (0.079511)
+Other time (%) = 437.884 (94.5124)
 
-Nlocal:    1675 ave 1829 max 1521 min
+Nlocal:    1450 ave 1828 max 1072 min
 Histogram: 1 0 0 0 0 0 0 0 0 1
-Nghost:    219.5 ave 233 max 206 min
+Nghost:    229 ave 240 max 218 min
 Histogram: 1 0 0 0 0 0 0 0 0 1
-Neighs:    22732.5 ave 24733 max 20732 min
+Neighs:    17519.5 ave 22068 max 12971 min
 Histogram: 1 0 0 0 0 0 0 0 0 1
 
-Total # of neighbors = 45465
-Ave neighs/atom = 13.5716
-Neighbor list builds = 512
+Total # of neighbors = 35039
+Ave neighs/atom = 12.0824
+Neighbor list builds = 652
 Dangerous builds = 0
 unfix   moveplate2
 unfix   plate
 #use the imported mesh as granular wall
 fix     bucket_wall all wall/gran model hooke tangential history mesh n_meshes 1 meshes cad1
 run     1
-Setting up run at Mon Jan 28 19:38:05 2019
+Setting up run at Tue Jan 29 21:39:33 2019
 
-Memory usage per processor = 32.2453 Mbytes
+Memory usage per processor = 34.9932 Mbytes
     Step    Atoms         KinEng            CPU         Volume 
-  149999     3350      59.619884              0      3.0558911 
-  150000     3350      59.676069      0.1660521      3.0558911 
-Loop time of 0.166061 on 2 procs for 1 steps with 3350 atoms, finish time Mon Jan 28 19:38:06 2019
+  149999     2900      75.892935              0       6.355451 
+  150000     2900       75.88766     0.15257692       6.355451 
+Loop time of 0.152588 on 2 procs for 1 steps with 2900 atoms, finish time Tue Jan 29 21:39:33 2019
 
 
-Pair  time (%) = 0.000691533 (0.416433)
+Pair  time (%) = 0.000533938 (0.349922)
 Neigh time (%) = 0 (0)
-Comm  time (%) = 1.95503e-05 (0.011773)
-Outpt time (%) = 0.164172 (98.8623)
-Other time (%) = 0.00117826 (0.709537)
+Comm  time (%) = 3.55244e-05 (0.0232812)
+Outpt time (%) = 0.151232 (99.1111)
+Other time (%) = 0.000786901 (0.515703)
 
-Nlocal:    1675 ave 1830 max 1520 min
+Nlocal:    1450 ave 1828 max 1072 min
 Histogram: 1 0 0 0 0 0 0 0 0 1
-Nghost:    219.5 ave 232 max 207 min
+Nghost:    229 ave 240 max 218 min
 Histogram: 1 0 0 0 0 0 0 0 0 1
-Neighs:    22733 ave 24733 max 20733 min
+Neighs:    17518.5 ave 22068 max 12969 min
 Histogram: 1 0 0 0 0 0 0 0 0 1
 
-Total # of neighbors = 45466
-Ave neighs/atom = 13.5719
+Total # of neighbors = 35037
+Ave neighs/atom = 12.0817
 Neighbor list builds = 0
 Dangerous builds = 0
 
 
-
 #-------------------------
-fix     movecad1 all move/mesh mesh cad1 linear 0.01462 0. -0.01348
-run     154000 upto
-Setting up run at Mon Jan 28 19:38:06 2019
+fix     movecad1 all move/mesh mesh cad1 rotate origin 0. 0. 0. axis 0. -1. 0. period 94.9346
+run     152400 upto
+Setting up run at Tue Jan 29 21:39:33 2019
 
-Memory usage per processor = 32.2454 Mbytes
+Memory usage per processor = 34.9932 Mbytes
     Step    Atoms         KinEng            CPU         Volume 
-  150000     3350      59.676069              0      3.0562326 
-  154000     3350      52.446492      13.916447      4.4836652 
-Loop time of 13.9165 on 2 procs for 4000 steps with 3350 atoms, finish time Mon Jan 28 19:38:20 2019
+  150000     2900       75.88766              0      6.3558894 
+  152400     2900      69.427781      8.9966741       7.417098 
+Loop time of 8.99669 on 2 procs for 2400 steps with 2900 atoms, finish time Tue Jan 29 21:39:42 2019
 
 
-Pair  time (%) = 2.76811 (19.8909)
-Neigh time (%) = 0.172811 (1.24177)
-Comm  time (%) = 0.581144 (4.17595)
-Outpt time (%) = 1.95503e-05 (0.000140483)
-Other time (%) = 10.3944 (74.6912)
+Pair  time (%) = 1.25764 (13.9789)
+Neigh time (%) = 0.122238 (1.3587)
+Comm  time (%) = 0.341984 (3.80122)
+Outpt time (%) = 9.84669e-05 (0.00109448)
+Other time (%) = 7.27472 (80.86)
 
-Nlocal:    1675 ave 1833 max 1517 min
+Nlocal:    1450 ave 1830 max 1070 min
 Histogram: 1 0 0 0 0 0 0 0 0 1
-Nghost:    221 ave 235 max 207 min
+Nghost:    232 ave 246 max 218 min
 Histogram: 1 0 0 0 0 0 0 0 0 1
-Neighs:    22683 ave 24684 max 20682 min
+Neighs:    17497 ave 22036 max 12958 min
 Histogram: 1 0 0 0 0 0 0 0 0 1
 
-Total # of neighbors = 45366
-Ave neighs/atom = 13.5421
-Neighbor list builds = 74
+Total # of neighbors = 34994
+Ave neighs/atom = 12.0669
+Neighbor list builds = 48
 Dangerous builds = 0
 unfix   movecad1
 
 #-------------------------
-fix     movecad2 all move/mesh mesh cad1 linear 0.03189 0. -0.02853
-run     162800 upto
-Setting up run at Mon Jan 28 19:38:20 2019
+fix     movecad2 all move/mesh mesh cad1 rotate origin 0. 0. 0. axis 0. -1. 0. period 23.2766
+run     170000 upto
+Setting up run at Tue Jan 29 21:39:42 2019
 
-Memory usage per processor = 33.3777 Mbytes
+Memory usage per processor = 35.8345 Mbytes
     Step    Atoms         KinEng            CPU         Volume 
-  154000     3350      52.446492              0      4.5003856 
-  162800     3350      38.394264      32.660323      8.1737111 
-Loop time of 32.6603 on 2 procs for 8800 steps with 3350 atoms, finish time Mon Jan 28 19:38:52 2019
+  152400     2900      69.427781              0      7.4303745 
+  170000     2900      33.645576      64.496008       16.54251 
+Loop time of 64.496 on 2 procs for 17600 steps with 2900 atoms, finish time Tue Jan 29 21:40:46 2019
 
 
-Pair  time (%) = 6.6059 (20.2261)
-Neigh time (%) = 0.476235 (1.45814)
-Comm  time (%) = 1.33212 (4.07871)
-Outpt time (%) = 0.144687 (0.443004)
-Other time (%) = 24.1014 (73.7941)
+Pair  time (%) = 9.14461 (14.1786)
+Neigh time (%) = 1.21088 (1.87744)
+Comm  time (%) = 2.23824 (3.47036)
+Outpt time (%) = 0.276778 (0.42914)
+Other time (%) = 51.6255 (80.0445)
 
-Nlocal:    1675 ave 1834 max 1516 min
+Nlocal:    1450 ave 1804 max 1096 min
 Histogram: 1 0 0 0 0 0 0 0 0 1
-Nghost:    220.5 ave 237 max 204 min
+Nghost:    227.5 ave 233 max 222 min
 Histogram: 1 0 0 0 0 0 0 0 0 1
-Neighs:    22685 ave 24723 max 20647 min
+Neighs:    17454 ave 21960 max 12948 min
 Histogram: 1 0 0 0 0 0 0 0 0 1
 
-Total # of neighbors = 45370
-Ave neighs/atom = 13.5433
-Neighbor list builds = 156
+Total # of neighbors = 34908
+Ave neighs/atom = 12.0372
+Neighbor list builds = 333
 Dangerous builds = 0
 unfix   movecad2
 
 #-------------------------
-fix     movecad3 all move/mesh mesh cad1 linear 0.04293 0. -0.03054
-run     246000 upto
-Setting up run at Mon Jan 28 19:38:52 2019
+fix     movecad3 all move/mesh mesh cad1 rotate origin 0. 0. 0. axis 0. -1. 0. period 19.4578
+run     312400 upto
+Setting up run at Tue Jan 29 21:40:46 2019
 
-Memory usage per processor = 36.2942 Mbytes
+Memory usage per processor = 43.167 Mbytes
     Step    Atoms         KinEng            CPU         Volume 
-  162800     3350      38.394264              0      8.1970756 
-  246000     3350       12.07887      383.16711      63.226457 
-Loop time of 383.167 on 2 procs for 83200 steps with 3350 atoms, finish time Mon Jan 28 19:45:16 2019
+  170000     2900      33.645576              0      16.558533 
+  312400     2900      14.770185      763.44879      133.62841 
+Loop time of 763.449 on 2 procs for 142400 steps with 2900 atoms, finish time Tue Jan 29 21:53:30 2019
 
 
-Pair  time (%) = 61.0511 (15.9333)
-Neigh time (%) = 10.0684 (2.62767)
-Comm  time (%) = 10.8917 (2.84256)
-Outpt time (%) = 1.14302 (0.298309)
-Other time (%) = 300.013 (78.2982)
+Pair  time (%) = 75.5295 (9.8932)
+Neigh time (%) = 31.697 (4.15182)
+Comm  time (%) = 18.7384 (2.45444)
+Outpt time (%) = 1.96407 (0.257263)
+Other time (%) = 635.52 (83.2433)
 
-Nlocal:    1675 ave 1834 max 1516 min
+Nlocal:    1450 ave 1791 max 1109 min
 Histogram: 1 0 0 0 0 0 0 0 0 1
-Nghost:    216.5 ave 222 max 211 min
-Histogram: 1 0 0 0 0 0 0 0 0 1
-Neighs:    22625 ave 24248 max 21002 min
+Nghost:    255 ave 255 max 255 min
+Histogram: 2 0 0 0 0 0 0 0 0 0
+Neighs:    18559.5 ave 22709 max 14410 min
 Histogram: 1 0 0 0 0 0 0 0 0 1
 
-Total # of neighbors = 45250
-Ave neighs/atom = 13.5075
-Neighbor list builds = 1054
+Total # of neighbors = 37119
+Ave neighs/atom = 12.7997
+Neighbor list builds = 1773
 Dangerous builds = 0
 unfix   movecad3
 
 #-------------------------
-fix     movecad4 all move/mesh mesh cad1 linear 0.05286 0. -0.02443
-run     328400 upto
-Setting up run at Mon Jan 28 19:45:16 2019
+fix     movecad4 all move/mesh mesh cad1 rotate origin 0. 0. 0. axis 0. -1. 0. period 22.7349
+run     322000 upto
+Setting up run at Tue Jan 29 21:53:30 2019
 
-Memory usage per processor = 78.9463 Mbytes
+Memory usage per processor = 135.419 Mbytes
     Step    Atoms         KinEng            CPU         Volume 
-  246000     3350       12.07887              0      63.256785 
-  328400     3350      7.3767485      548.87145      104.71456 
-Loop time of 548.871 on 2 procs for 82400 steps with 3350 atoms, finish time Mon Jan 28 19:54:24 2019
+  312400     2900      14.770185              0      133.64707 
+  322000     2900      13.437384      65.002504      138.98687 
+Loop time of 65.0025 on 2 procs for 9600 steps with 2900 atoms, finish time Tue Jan 29 21:54:35 2019
 
 
-Pair  time (%) = 60.1775 (10.9639)
-Neigh time (%) = 21.1014 (3.84451)
-Comm  time (%) = 12.7998 (2.33203)
-Outpt time (%) = 1.13031 (0.205934)
-Other time (%) = 453.662 (82.6537)
+Pair  time (%) = 5.06322 (7.78926)
+Neigh time (%) = 3.77686 (5.81032)
+Comm  time (%) = 1.57552 (2.42378)
+Outpt time (%) = 0.122892 (0.189058)
+Other time (%) = 54.464 (83.7876)
 
-Nlocal:    1675 ave 1762 max 1588 min
+Nlocal:    1450 ave 1783 max 1117 min
 Histogram: 1 0 0 0 0 0 0 0 0 1
-Nghost:    216 ave 225 max 207 min
+Nghost:    253 ave 257 max 249 min
 Histogram: 1 0 0 0 0 0 0 0 0 1
-Neighs:    22817 ave 23494 max 22140 min
+Neighs:    18688.5 ave 22791 max 14586 min
 Histogram: 1 0 0 0 0 0 0 0 0 1
 
-Total # of neighbors = 45634
-Ave neighs/atom = 13.6221
-Neighbor list builds = 918
+Total # of neighbors = 37377
+Ave neighs/atom = 12.8886
+Neighbor list builds = 116
 Dangerous builds = 0
 unfix   movecad4
+
+#-------------------------
+fix     movecad5 all move/mesh mesh cad1 rotate origin 0. 0. 0. axis 0. -1. 0. period 17.7136
+run     462000 upto
+Setting up run at Tue Jan 29 21:54:35 2019
+
+Memory usage per processor = 139.697 Mbytes
+    Step    Atoms         KinEng            CPU         Volume 
+  322000     2900      13.437384              0      138.98738 
+  462000     2900       1.686064      1026.5098      53.010478 
+Loop time of 1026.51 on 2 procs for 140000 steps with 2900 atoms, finish time Tue Jan 29 22:11:42 2019
+
+
+Pair  time (%) = 77.6404 (7.56353)
+Neigh time (%) = 65.0013 (6.33226)
+Comm  time (%) = 30.2543 (2.94729)
+Outpt time (%) = 1.76703 (0.172139)
+Other time (%) = 851.847 (82.9848)
+
+Nlocal:    1450 ave 1725 max 1175 min
+Histogram: 1 0 0 0 0 0 0 0 0 1
+Nghost:    273 ave 278 max 268 min
+Histogram: 1 0 0 0 0 0 0 0 0 1
+Neighs:    19207.5 ave 21994 max 16421 min
+Histogram: 1 0 0 0 0 0 0 0 0 1
+
+Total # of neighbors = 38415
+Ave neighs/atom = 13.2466
+Neighbor list builds = 2312
+Dangerous builds = 0
+unfix   movecad5
+
+#-------------------------
+fix     movecad6 all move/mesh mesh cad1 rotate origin 0. 0. 0. axis 0. -1. 0. period 23.3453
+run     469200 upto
+Setting up run at Tue Jan 29 22:11:42 2019
+
+Memory usage per processor = 148.266 Mbytes
+    Step    Atoms         KinEng            CPU         Volume 
+  462000     2900       1.686064              0      52.976192 
+  469200     2900      1.7598395      57.843456      36.863876 
+Loop time of 57.8435 on 2 procs for 7200 steps with 2900 atoms, finish time Tue Jan 29 22:12:40 2019
+
+
+Pair  time (%) = 4.10162 (7.0909)
+Neigh time (%) = 1.60757 (2.77918)
+Comm  time (%) = 1.79853 (3.1093)
+Outpt time (%) = 0.00011456 (0.000198052)
+Other time (%) = 50.3356 (87.0204)
+
+Nlocal:    1450 ave 1721 max 1179 min
+Histogram: 1 0 0 0 0 0 0 0 0 1
+Nghost:    275.5 ave 281 max 270 min
+Histogram: 1 0 0 0 0 0 0 0 0 1
+Neighs:    19212 ave 21918 max 16506 min
+Histogram: 1 0 0 0 0 0 0 0 0 1
+
+Total # of neighbors = 38424
+Ave neighs/atom = 13.2497
+Neighbor list builds = 147
+Dangerous builds = 0
+unfix   movecad6
+
+
+#-------------------------
+fix     movecad7 all move/mesh mesh cad1 rotate origin 0. 0. 0. axis 0. -1. 0. period 18.2028
+run     614800 upto
+Setting up run at Tue Jan 29 22:12:40 2019
+
+Memory usage per processor = 148.266 Mbytes
+    Step    Atoms         KinEng            CPU         Volume 
+  469200     2900      1.7598395              0      36.840467 
+  614800     2900     0.83607133      1296.1859      6.2592177 
+Loop time of 1296.19 on 2 procs for 145600 steps with 2900 atoms, finish time Tue Jan 29 22:34:16 2019
+
+
+Pair  time (%) = 84.4009 (6.51148)
+Neigh time (%) = 6.09301 (0.470072)
+Comm  time (%) = 24.6009 (1.89795)
+Outpt time (%) = 1.94269 (0.149877)
+Other time (%) = 1179.15 (90.9706)
+
+Nlocal:    1450 ave 1604 max 1296 min
+Histogram: 1 0 0 0 0 0 0 0 0 1
+Nghost:    313 ave 316 max 310 min
+Histogram: 1 0 0 0 0 0 0 0 0 1
+Neighs:    18993.5 ave 19625 max 18362 min
+Histogram: 1 0 0 0 0 0 0 0 0 1
+
+Total # of neighbors = 37987
+Ave neighs/atom = 13.099
+Neighbor list builds = 1755
+Dangerous builds = 0
+unfix   movecad7
+
+#-------------------------
+fix     movecad all move/mesh mesh cad1 rotate origin 0. 0. 0. axis 0. -1. 0. period 21.5401
+run     628400 upto
+Setting up run at Tue Jan 29 22:34:16 2019
+
+Memory usage per processor = 152.862 Mbytes
+    Step    Atoms         KinEng            CPU         Volume 
+  614800     2900     0.83607133              0      6.2601224 
+  628400     2900     0.83686976      131.08889      6.4262647 
+Loop time of 131.089 on 2 procs for 13600 steps with 2900 atoms, finish time Tue Jan 29 22:36:27 2019
+
+
+Pair  time (%) = 7.78263 (5.93691)
+Neigh time (%) = 0.425884 (0.324882)
+Comm  time (%) = 2.29857 (1.75344)
+Outpt time (%) = 0.134953 (0.102947)
+Other time (%) = 120.447 (91.8818)
+
+Nlocal:    1450 ave 1596 max 1304 min
+Histogram: 1 0 0 0 0 0 0 0 0 1
+Nghost:    315 ave 315 max 315 min
+Histogram: 2 0 0 0 0 0 0 0 0 0
+Neighs:    18994 ave 19486 max 18502 min
+Histogram: 1 0 0 0 0 0 0 0 0 1
+
+Total # of neighbors = 37988
+Ave neighs/atom = 13.0993
+Neighbor list builds = 151
+Dangerous builds = 0
+unfix   movecad
+
+#-------------------------
+fix     movecad all move/mesh mesh cad1 rotate origin 0. 0. 0. axis 0. -1. 0. period 17.8696
+run     764400 upto
+Setting up run at Tue Jan 29 22:36:27 2019
+
+Memory usage per processor = 152.862 Mbytes
+    Step    Atoms         KinEng            CPU         Volume 
+  628400     2900     0.83686976              0      6.4263869 
+  764400     2900     0.83754813       1360.158      8.0889103 
+Loop time of 1360.16 on 2 procs for 136000 steps with 2900 atoms, finish time Tue Jan 29 22:59:07 2019
+
+
+Pair  time (%) = 77.422 (5.69213)
+Neigh time (%) = 4.61427 (0.339245)
+Comm  time (%) = 20.0028 (1.47062)
+Outpt time (%) = 1.75512 (0.129038)
+Other time (%) = 1256.36 (92.369)
+
+Nlocal:    1450 ave 1507 max 1393 min
+Histogram: 1 0 0 0 0 0 0 0 0 1
+Nghost:    281 ave 297 max 265 min
+Histogram: 1 0 0 0 0 0 0 0 0 1
+Neighs:    18682 ave 19444 max 17920 min
+Histogram: 1 0 0 0 0 0 0 0 0 1
+
+Total # of neighbors = 37364
+Ave neighs/atom = 12.8841
+Neighbor list builds = 1511
+Dangerous builds = 0
+unfix   movecad
 
 
