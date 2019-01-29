@@ -15,5 +15,5 @@ cRFarray=("0.3" "0.5" "0.7" "0.9")
             echo "cF0.3_cRF${cRFarray[j]}"
             echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
         mpirun -np 2 lmp_auto < in.yM150e6_ps2_cR2_d1500_r7.5
-    #done
+    done
 #done
