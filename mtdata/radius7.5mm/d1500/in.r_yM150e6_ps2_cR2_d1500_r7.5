@@ -3,27 +3,27 @@
 
 
 #----set the space to simulate
-variable xsn equal 0.105		#x space negative dir
-variable xsp equal 0.36		#x space positive dir
+variable xsn equal 0.145		#x space negative dir
+variable xsp equal 0.23		#x space positive dir
 variable hwid equal 0.0735	#bucket center offset
 variable ysn equal 0.115-${hwid}	#y space negative dir
 variable ysp equal 0.115+${hwid}	#y
-variable zsn equal 0.245    #z
-variable zsp equal 0.015     #z
+variable zsn equal 0.18    #z
+variable zsp equal 0.03    #z
 variable ish equal 0.10     #insertion space height
 
 variable yMod equal 150.e6
 variable pois equal 0.2
 variable cR equal 0.2
-variable cF equal 0.9
+variable cF equal 0.5
 variable cRF equal 0.9
 variable charV equal 2.
 variable tstep equal 0.00001
-variable dens equal 4000
+variable dens equal 1500
 variable radi equal 0.0075
 variable dstep equal 10000
 variable fstep equal 800
-variable nparticle equal 3350
+variable nparticle equal 2900
 
 # Moving mesh example
 atom_style	granular
@@ -68,10 +68,10 @@ fix boxwalls_z2 all wall/gran model hooke tangential history primitive type 1 zp
 
 #import mesh from cad:
 fix     cad1 all mesh/surface/stress file meshes/bucket.stl type 1 &
-        rotate axis 0. 0. 1. angle 180. rotate axis 1. 0. 0. angle -90. rotate axis 0. 1. 0. angle 1.3 &
+        rotate axis 0. 0. 1. angle 180. rotate axis 1. 0. 0. angle -90. rotate axis 0. 1. 0. angle 61.3 &
         scale 0.001 reference_point 0 ${hwid} 0 stress on
 
-fix     cad2 all mesh/surface file meshes/plate.stl type 1 move 145. -255 -140 &
+fix     cad2 all mesh/surface file meshes/plate.stl type 1 move 90. -260 -80 &
         scale 0.001
 
 #region of insertion
@@ -98,10 +98,10 @@ variable Ry equal f_cad1[8]
 variable Rz equal f_cad1[9]
 
 #make a dump of particles and the stl file 
-dump    dmp all custom/vtk  ${dstep} posts/ipr_postyM${yMod}_ps${pois}_cR${cR}_cF${cF}_cRF${cRF}_cV${charV}_ts${tstep}_d${dens}_r${radi}/movingMesh_*.vtk id type type x y z ix iy iz vx vy vz fx fy fz omegax omegay omegaz radius
-dump    dumpstl all mesh/stl ${dstep} posts/ipr_postyM${yMod}_ps${pois}_cR${cR}_cF${cF}_cRF${cRF}_cV${charV}_ts${tstep}_d${dens}_r${radi}/dump*.stl
+dump    dmp all custom/vtk  ${dstep} posts/r_postyM${yMod}_ps${pois}_cR${cR}_cF${cF}_cRF${cRF}_cV${charV}_ts${tstep}_d${dens}_r${radi}/movingMesh_*.vtk id type type x y z ix iy iz vx vy vz fx fy fz omegax omegay omegaz radius
+dump    dumpstl all mesh/stl ${dstep} posts/r_postyM${yMod}_ps${pois}_cR${cR}_cF${cF}_cRF${cRF}_cV${charV}_ts${tstep}_d${dens}_r${radi}/dump*.stl
 fix forceslog all print  ${fstep} "${time},${fx},${fy},${fz},${Mx},${My},${Mz},${Rx},${Ry},${Rz}" &
-    file ../../../csv/ipr/ipr_yM${yMod}_ps${pois}_cR${cR}_cF${cF}_cRF${cRF}_cV${charV}_ts${tstep}_d${dens}_r${radi}.csv title "t,Fx,Fy,Fz,Mx,My,Mz,Rx,Ry,Rz" screen no
+    file ../../../csv/r/r_yM${yMod}_ps${pois}_cR${cR}_cF${cF}_cRF${cRF}_cV${charV}_ts${tstep}_d${dens}_r${radi}.csv title "t,Fx,Fy,Fz,Mx,My,Mz,Rx,Ry,Rz" screen no
 #print every NUMBER steps
 
 #run with particle insertion
@@ -128,74 +128,50 @@ fix     bucket_wall all wall/gran model hooke tangential history mesh n_meshes 1
 run     1
 
 
-
 #-------------------------
-fix     movecad1 all move/mesh mesh cad1 linear 0.007925 0. -0.01438
-run     158000 upto
+fix     movecad1 all move/mesh mesh cad1 rotate origin 0. 0. 0. axis 0. -1. 0. period 94.9346
+run     152400 upto
 unfix   movecad1
 
 #-------------------------
-fix     movecad2 all move/mesh mesh cad1 linear 0.018126 0. -0.02008
-run     254000 upto
+fix     movecad2 all move/mesh mesh cad1 rotate origin 0. 0. 0. axis 0. -1. 0. period 23.2766
+run     170000 upto
 unfix   movecad2
 
 #-------------------------
-fix     movecad3 all move/mesh mesh cad1 linear 0.030074 0. -0.01737
-run     349200 upto
+fix     movecad3 all move/mesh mesh cad1 rotate origin 0. 0. 0. axis 0. -1. 0. period 19.4578
+run     312400 upto
 unfix   movecad3
 
 #-------------------------
-fix     movecad4 all move/mesh mesh cad1 linear 0.040878 0. -0.01334
-run     445200 upto
+fix     movecad4 all move/mesh mesh cad1 rotate origin 0. 0. 0. axis 0. -1. 0. period 22.7349
+run     322000 upto
 unfix   movecad4
 
 #-------------------------
-fix     movecad5 all move/mesh mesh cad1 linear 0.047724 0. -0.00173
-run     510000 upto
+fix     movecad5 all move/mesh mesh cad1 rotate origin 0. 0. 0. axis 0. -1. 0. period 17.7136
+run     462000 upto
 unfix   movecad5
 
-
 #-------------------------
-fix     movecad6 all move/mesh mesh cad1 linear 0.054448 0. 0.00113
-run     575600 upto
+fix     movecad6 all move/mesh mesh cad1 rotate origin 0. 0. 0. axis 0. -1. 0. period 23.3453
+run     469200 upto
 unfix   movecad6
 
 
-
-
 #-------------------------
-fix     movecad7 all move/mesh mesh cad1 rotate origin 0.1525508 0. -0.0501465 axis 0. -1. 0. period 655.713
-run     580400 upto
+fix     movecad7 all move/mesh mesh cad1 rotate origin 0. 0. 0. axis 0. -1. 0. period 18.2028
+run     614800 upto
 unfix   movecad7
 
 #-------------------------
-fix     movecad8 all move/mesh mesh cad1 rotate origin 0.1525508 0. -0.0501465 axis 0. -1. 0. period 28.3213
-run     590000 upto
-unfix   movecad8
+fix     movecad all move/mesh mesh cad1 rotate origin 0. 0. 0. axis 0. -1. 0. period 21.5401
+run     628400 upto
+unfix   movecad
 
 #-------------------------
-fix     movecad9 all move/mesh mesh cad1 rotate origin 0.1525508 0. -0.0501465 axis 0. -1. 0. period 18.9144
-run     600400 upto
-unfix   movecad9
-
-#-------------------------
-fix     movecad10 all move/mesh mesh cad1 rotate origin 0.1525508 0. -0.0501465 axis 0. -1. 0. period 17.7525
-run     728400 upto
-unfix   movecad10
-
-#-------------------------
-fix     movecad11 all move/mesh mesh cad1 rotate origin 0.1525508 0. -0.0501465 axis 0. -1. 0. period 23.3935
-run     735600 upto
-unfix   movecad11
-
-#-------------------------
-fix     movecad12 all move/mesh mesh cad1 rotate origin 0.1525508 0. -0.0501465 axis 0. -1. 0. period 17.69
-run     749200 upto
-unfix   movecad12
-
-#-------------------------
-fix     movecad13 all move/mesh mesh cad1 rotate origin 0.1525508 0. -0.0501465 axis 0. -1. 0. period 16.8562
-run     868400 upto
-unfix   movecad13
+fix     movecad all move/mesh mesh cad1 rotate origin 0. 0. 0. axis 0. -1. 0. period 17.8696
+run     764400 upto
+unfix   movecad
 
 
